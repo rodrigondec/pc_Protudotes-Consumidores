@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+	"sync"
 )
 
 const TAMANHO_BUFFER = 500
@@ -15,6 +16,8 @@ type Pedido struct {
 	id int //identificador
 	dados string
 }
+
+var wg sync.WaitGroup //cria grupo de espera
 
 /*gorotina consumidora que consumira um canal
 bufferizado com 5000 pedidos*/
@@ -30,6 +33,7 @@ func consumidor (ch chan Pedido, n int) {
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
 	}
+	wg.Done()
 }
 
 func main() {
@@ -43,13 +47,13 @@ func main() {
 	}
 	close(ch) //fecha o canal
 
+	//executa todos os consumidores
 	for i := 0; i < QTD_CONSUMIDORES; i++ {
+		wg.Add(1)
 		go consumidor(ch, i)
 	}
 
-	//espera termino de execucao dos consumidores iterativamente
-	for ; len(ch) > 0; {
-		//fmt.Println("DEBUG " + strconv.Itoa(len(ch)))
-		time.Sleep(500 * time.Millisecond);
-	}	
+	//espera termino de execucao de todos os consumidores
+	wg.Wait()
+
 }
