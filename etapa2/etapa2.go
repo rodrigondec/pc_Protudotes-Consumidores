@@ -1,4 +1,4 @@
-package etapa2
+package main
 
 import (
 	"sync"
@@ -41,6 +41,12 @@ func consumidor (ch chan Pedido, n int) {
  bufferizado com 5000 pedidos */
 func produtor (ch chan Pedido, n int){
 	for {
+		//value, open := <- ch
+		//if !open{
+		//
+		//}
+
+		var p Pedido
 		horario_inicio := time.Now()
 		p = Pedido{id_pedido, "Dados do pedido #" + strconv.Itoa(id_pedido)}
 		id_pedido += 1
@@ -55,6 +61,8 @@ func produtor (ch chan Pedido, n int){
 
 		time.Sleep(500 * time.Millisecond)
 	}
+
+// Precisa ter um wait group para os produtores? acho que não pq produzem indefinidamente né?
 }
 
 
@@ -62,23 +70,17 @@ func main() {
 	if len(os.Args) == 4 {
 		TAMANHO_BUFFER, _ := strconv.Atoi(os.Args[1])
 		QTD_CONSUMIDORES, _ := strconv.Atoi(os.Args[2])
-		QTD_PRODUTORES, _ := strconv.Atoi(os.Args[3])
-		//var p Pedido
+		//QTD_PRODUTORES, _ := strconv.Atoi(os.Args[3])
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
-
 
 		//executa todos os produtores
 		for i := 1; i <= QTD_PRODUTORES; i++ {
 			//wg.Add(1)
 			go produtor(ch, i)
 		}
-		
-		//loop adiciona pedidos no canal
-		//for i := 1; i <= TAMANHO_BUFFER; i++ {
-		//	p = Pedido{i, "Dados do pedido #" + strconv.Itoa(i)}
-		//	ch <- p
-		//}
+
 		//close(ch) //fecha o canal
+		//ch <- Pedido{1, "Dados do pedido #" + strconv.Itoa(1)}
 
 		//executa todos os consumidores
 		for i := 1; i <= QTD_CONSUMIDORES; i++ {

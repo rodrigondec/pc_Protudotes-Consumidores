@@ -1,4 +1,4 @@
-package etapa1
+package main
 
 import (
 	"fmt"
