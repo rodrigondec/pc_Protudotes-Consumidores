@@ -7,8 +7,8 @@ import (
 	"sync"
 )
 
-const TAMANHO_BUFFER = 500
-const QTD_CONSUMIDORES = 100
+const TAMANHO_BUFFER = 5000
+const QTD_CONSUMIDORES = 1
 const SEPARADOR = " / "
 
 //estrutura que representa um pedido
