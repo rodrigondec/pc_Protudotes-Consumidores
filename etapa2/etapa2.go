@@ -10,6 +10,7 @@ import (
 
 const SEPARADOR = " / "
 var id_pedido = 1
+var pedidos_terminados = false
 
 //estrutura que representa um pedido
 type Pedido struct {
@@ -39,19 +40,29 @@ func consumidor (ch chan Pedido, n int) {
 
 /* gorotina produtora que produzirá em um canal
  bufferizado com 5000 pedidos */
-func produtor (ch chan Pedido, n int){
+func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex){
 	for {
-		//value, open := <- ch
-		//if !open{
-		//
-		//}
+		mutex_qt.Lock()
+		if pedidos_terminados{
+			mutex_qt.Unlock()
+			break
+		}
+		if id_pedido == 4999{
+			pedidos_terminados = true
+		}
+		mutex_qt.Unlock()
 
 		var p Pedido
 		horario_inicio := time.Now()
+		time.Sleep(500 * time.Millisecond)
+		mutex_id.Lock()
 		p = Pedido{id_pedido, "Dados do pedido #" + strconv.Itoa(id_pedido)}
 		id_pedido += 1
+		mutex_id.Unlock()
 		ch <- p
 		horario_termino := time.Now()
+
+
 
 		fmt.Println("Produtor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
@@ -59,28 +70,29 @@ func produtor (ch chan Pedido, n int){
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
 
-		time.Sleep(500 * time.Millisecond)
-	}
+		if pedidos_terminados{
+			close(ch)
+		}
 
-// Precisa ter um wait group para os produtores? acho que não pq produzem indefinidamente né?
+
+	}
 }
 
 
 func main() {
-	if len(os.Args) == 4 {
-		TAMANHO_BUFFER, _ := strconv.Atoi(os.Args[1])
+	if len(os.Args) == 3 {
+		var TAMANHO_BUFFER = 5000
 		QTD_CONSUMIDORES, _ := strconv.Atoi(os.Args[2])
-		//QTD_PRODUTORES, _ := strconv.Atoi(os.Args[3])
+		QTD_PRODUTORES, _ := strconv.Atoi(os.Args[3])
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
+		var m_qt_atividades = &sync.Mutex{}
+		var m_id_atividades = &sync.Mutex{}
 
 		//executa todos os produtores
 		for i := 1; i <= QTD_PRODUTORES; i++ {
 			//wg.Add(1)
-			go produtor(ch, i)
+			go produtor(ch, i, m_qt_atividades, m_id_atividades)
 		}
-
-		//close(ch) //fecha o canal
-		//ch <- Pedido{1, "Dados do pedido #" + strconv.Itoa(1)}
 
 		//executa todos os consumidores
 		for i := 1; i <= QTD_CONSUMIDORES; i++ {
