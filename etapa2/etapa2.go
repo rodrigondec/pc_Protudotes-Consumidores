@@ -9,6 +9,7 @@ import (
 )
 
 const SEPARADOR = " / "
+const TAMANHO_BUFFER = 10
 var id_pedido = 1
 var pedidos_terminados = false
 
@@ -47,7 +48,7 @@ func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex
 			mutex_qt.Unlock()
 			break
 		}
-		if id_pedido == 4999{
+		if id_pedido >= (TAMANHO_BUFFER){
 			pedidos_terminados = true
 		}
 		mutex_qt.Unlock()
@@ -63,7 +64,6 @@ func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex
 		horario_termino := time.Now()
 
 
-
 		fmt.Println("Produtor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
@@ -74,23 +74,20 @@ func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex
 			close(ch)
 		}
 
-
 	}
 }
 
 
 func main() {
 	if len(os.Args) == 3 {
-		var TAMANHO_BUFFER = 5000
-		QTD_CONSUMIDORES, _ := strconv.Atoi(os.Args[2])
-		QTD_PRODUTORES, _ := strconv.Atoi(os.Args[3])
+		QTD_CONSUMIDORES, _ := strconv.Atoi(os.Args[1])
+		QTD_PRODUTORES, _ := strconv.Atoi(os.Args[2])
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
 		var m_qt_atividades = &sync.Mutex{}
 		var m_id_atividades = &sync.Mutex{}
 
 		//executa todos os produtores
 		for i := 1; i <= QTD_PRODUTORES; i++ {
-			//wg.Add(1)
 			go produtor(ch, i, m_qt_atividades, m_id_atividades)
 		}
 
