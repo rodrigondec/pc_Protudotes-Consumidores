@@ -1,0 +1,50 @@
+-------------------------ITERATION #1-------------------------
+Start time: 05:48:15
+Finished time: 05:48:19
+Duration: 4 second(s)
+
+-------------------------ITERATION #2-------------------------
+Start time: 05:48:19
+Finished time: 05:48:22
+Duration: 3 second(s)
+
+-------------------------ITERATION #3-------------------------
+Start time: 05:48:22
+Finished time: 05:48:26
+Duration: 4 second(s)
+
+-------------------------ITERATION #4-------------------------
+Start time: 05:48:26
+Finished time: 05:48:29
+Duration: 3 second(s)
+
+-------------------------ITERATION #5-------------------------
+Start time: 05:48:29
+Finished time: 05:48:33
+Duration: 4 second(s)
+
+-------------------------ITERATION #6-------------------------
+Start time: 05:48:33
+Finished time: 05:48:37
+Duration: 4 second(s)
+
+-------------------------ITERATION #7-------------------------
+Start time: 05:48:37
+Finished time: 05:48:40
+Duration: 3 second(s)
+
+-------------------------ITERATION #8-------------------------
+Start time: 05:48:40
+Finished time: 05:48:44
+Duration: 4 second(s)
+
+-------------------------ITERATION #9-------------------------
+Start time: 05:48:44
+Finished time: 05:48:47
+Duration: 3 second(s)
+
+-------------------------ITERATION #10-------------------------
+Start time: 05:48:47
+Finished time: 05:48:51
+Duration: 4 second(s)
+
