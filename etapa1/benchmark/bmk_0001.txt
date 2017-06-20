@@ -21,7 +21,7 @@ Duration: 2503 second(s)
 -------------------------ITERATION #5-------------------------
 Start time: 23:18:53
 Finished time: 00:00:36
-Duration: -83897 second(s)
+Duration: 2503 second(s)
 
 -------------------------ITERATION #6-------------------------
 Start time: 00:00:36
