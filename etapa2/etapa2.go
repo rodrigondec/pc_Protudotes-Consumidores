@@ -9,9 +9,10 @@ import (
 )
 
 const SEPARADOR = " / "
-const TAMANHO_BUFFER = 10
+const TAMANHO_BUFFER = 5000
 var id_pedido = 1
 var pedidos_terminados = false
+var is_channel_closed = false
 
 //estrutura que representa um pedido
 type Pedido struct {
@@ -41,38 +42,37 @@ func consumidor (ch chan Pedido, n int) {
 
 /* gorotina produtora que produzirá em um canal
  bufferizado com 5000 pedidos */
-func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex){
-	for {
-		mutex_qt.Lock()
-		if pedidos_terminados{
-			mutex_qt.Unlock()
-			break
-		}
-		if id_pedido >= (TAMANHO_BUFFER){
-			pedidos_terminados = true
-		}
-		mutex_qt.Unlock()
+func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex) {
+	/*
+    defer func() {
+        if rec := recover(); rec != nil  {
+        	fmt.Println("Recover at produtor:", rec)
+        }
+    }()*/
 
+	for {
 		var p Pedido
 		horario_inicio := time.Now()
 		time.Sleep(500 * time.Millisecond)
-		mutex_id.Lock()
+		
+		if id_pedido > TAMANHO_BUFFER {
+			if !is_channel_closed {
+				is_channel_closed = true
+				close(ch)
+			}
+			return
+		}
 		p = Pedido{id_pedido, "Dados do pedido #" + strconv.Itoa(id_pedido)}
 		id_pedido += 1
-		mutex_id.Unlock()
 		ch <- p
 		horario_termino := time.Now()
 
 
-		fmt.Println("Produtor: " + strconv.Itoa(n) + SEPARADOR +
+		fmt.Println("\tProdutor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
-
-		if pedidos_terminados{
-			close(ch)
-		}
 
 	}
 }
