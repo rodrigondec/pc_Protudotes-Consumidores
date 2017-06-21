@@ -85,7 +85,7 @@ func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
 
-		id_pedido.Unlock()
+		//id_pedido.Unlock()
 
 	}
 }
