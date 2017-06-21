@@ -51,13 +51,6 @@ func consumidor (ch chan Pedido, n int, mutex *sync.Mutex) {
 /* gorotina produtora que produzirá em um canal
  bufferizado com 5000 pedidos */
 func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex) {
-	/*
-    defer func() {
-        if rec := recover(); rec != nil  {
-        	fmt.Println("Recover at produtor:", rec)
-        }
-    }()*/
-
 	for {
 		var p Pedido
 		horario_inicio := time.Now()
