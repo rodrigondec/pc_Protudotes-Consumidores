@@ -11,12 +11,9 @@ import (
 const SEPARADOR = " / "
 const TAMANHO_BUFFER = 10
 
-//var id_pedido = 1
-var pedidos_terminados = false
 var is_channel_closed = false
 
 var id_pedido struct{
-	sync.Mutex
 	n int
 }
 
@@ -33,9 +30,9 @@ var wg sync.WaitGroup //cria grupo de espera
 
 /* gorotina consumidora que consumirá de um canal
 bufferizado com 5000 pedidos */
-func consumidor (ch chan Pedido, n int, mutex *sync.Mutex) {
+func consumidor (ch chan Pedido, n int) {
 	for p := range ch {
-		mutex.Lock()
+		//mutex.Lock()
 		horario_inicio := time.Now()
 		time.Sleep(500 * time.Millisecond)
 		horario_termino := time.Now()
@@ -45,7 +42,7 @@ func consumidor (ch chan Pedido, n int, mutex *sync.Mutex) {
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
-		mutex.Unlock()
+		//mutex.Unlock()
 	}
 	wg.Done()
 }
@@ -53,14 +50,7 @@ func consumidor (ch chan Pedido, n int, mutex *sync.Mutex) {
 
 /* gorotina produtora que produzirá em um canal
  bufferizado com 5000 pedidos */
-func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex) {
-	/*
-    defer func() {
-        if rec := recover(); rec != nil  {
-        	fmt.Println("Recover at produtor:", rec)
-        }
-    }()*/
-
+func produtor (ch chan Pedido, n int) {
 	for {
 		var p Pedido
 		horario_inicio := time.Now()
@@ -72,11 +62,11 @@ func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex
 			}
 			return
 		}
-		id_pedido.Lock()
-		p = Pedido{id_pedido.n, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
+
+		id := id_pedido.n
 		id_pedido.n += 1
+		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
 		ch <- p
-		id_pedido.Unlock()
 		horario_termino := time.Now()
 
 		fmt.Println("\tProdutor: " + strconv.Itoa(n) + SEPARADOR +
@@ -84,8 +74,6 @@ func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
-
-		//id_pedido.Unlock()
 
 	}
 }
@@ -97,19 +85,16 @@ func main() {
 		QTD_PRODUTORES, _ := strconv.Atoi(os.Args[2])
 		id_pedido.n = 1
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
-		var m_qt_atividades = &sync.Mutex{}
-		var m_id_atividades = &sync.Mutex{}
-		var m_print_con = &sync.Mutex{}
 
 		//executa todos os produtores
 		for i := 1; i <= QTD_PRODUTORES; i++ {
-			go produtor(ch, i, m_qt_atividades, m_id_atividades)
+			go produtor(ch, i)
 		}
 
 		//executa todos os consumidores
 		for i := 1; i <= QTD_CONSUMIDORES; i++ {
 			wg.Add(1)
-			go consumidor(ch, i, m_print_con)
+			go consumidor(ch, i)
 		}
 
 		//espera termino de execucao de todos os consumidores
