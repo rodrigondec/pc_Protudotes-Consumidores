@@ -11,12 +11,9 @@ import (
 const SEPARADOR = " / "
 const TAMANHO_BUFFER = 5000
 
-//var id_pedido = 1
-var pedidos_terminados = false
 var is_channel_closed = false
 
 var id_pedido struct{
-	sync.Mutex
 	n int
 }
 
@@ -60,11 +57,10 @@ func produtor (ch chan Pedido, n int) {
 			}
 			return
 		}
-		//id_pedido.Lock()
+
 		id := id_pedido.n
 		id_pedido.n += 1
 		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
-		//id_pedido.Unlock()
 		ch <- p
 		horario_termino := time.Now()
 
