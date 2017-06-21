@@ -69,7 +69,6 @@ func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex
 		ch <- p
 		horario_termino := time.Now()
 
-
 		fmt.Println("\tProdutor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
