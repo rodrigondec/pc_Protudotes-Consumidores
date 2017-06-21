@@ -9,7 +9,7 @@ import (
 )
 
 const SEPARADOR = " / "
-const TAMANHO_BUFFER = 10
+const TAMANHO_BUFFER = 5000
 
 //var id_pedido = 1
 var pedidos_terminados = false
@@ -30,9 +30,8 @@ var wg sync.WaitGroup //cria grupo de espera
 
 /* gorotina consumidora que consumirá de um canal
 bufferizado com 5000 pedidos */
-func consumidor (ch chan Pedido, n int, mutex *sync.Mutex) {
+func consumidor (ch chan Pedido, n int) {
 	for p := range ch {
-		mutex.Lock()
 		horario_inicio := time.Now()
 		time.Sleep(500 * time.Millisecond)
 		horario_termino := time.Now()
@@ -42,7 +41,6 @@ func consumidor (ch chan Pedido, n int, mutex *sync.Mutex) {
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
-		mutex.Unlock()
 	}
 	wg.Done()
 }
@@ -87,7 +85,6 @@ func main() {
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
 		var m_qt_atividades = &sync.Mutex{}
 		var m_id_atividades = &sync.Mutex{}
-		var m_print_con = &sync.Mutex{}
 
 		//executa todos os produtores
 		for i := 1; i <= QTD_PRODUTORES; i++ {
@@ -97,7 +94,7 @@ func main() {
 		//executa todos os consumidores
 		for i := 1; i <= QTD_CONSUMIDORES; i++ {
 			wg.Add(1)
-			go consumidor(ch, i, m_print_con)
+			go consumidor(ch, i)
 		}
 
 		//espera termino de execucao de todos os consumidores
