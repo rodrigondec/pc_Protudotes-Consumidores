@@ -20,6 +20,9 @@ var id_pedido struct{
 	n int
 }
 
+var m_print_p = sync.Mutex{}
+var m_print_c = sync.Mutex{}
+
 //estrutura que representa um pedido
 type Pedido struct {
 	id int //identificador
@@ -72,16 +75,17 @@ func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex
 		id_pedido.Lock()
 		p = Pedido{id_pedido.n, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
 		id_pedido.n += 1
-		id_pedido.Unlock()
 		ch <- p
-		horario_termino := time.Now()
 
+		horario_termino := time.Now()
 
 		fmt.Println("\tProdutor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
+
+		id_pedido.Unlock()
 
 	}
 }
