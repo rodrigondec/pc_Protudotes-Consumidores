@@ -48,7 +48,7 @@ func consumidor (ch chan Pedido, n int) {
 
 /* gorotina produtora que produzirá em um canal
  bufferizado com 5000 pedidos */
-func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex) {
+func produtor (ch chan Pedido, n int, mutex_id *sync.Mutex) {
 	for {
 		var p Pedido
 		horario_inicio := time.Now()
@@ -83,12 +83,11 @@ func main() {
 		QTD_PRODUTORES, _ := strconv.Atoi(os.Args[2])
 		id_pedido.n = 1
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
-		var m_qt_atividades = &sync.Mutex{}
 		var m_id_atividades = &sync.Mutex{}
 
 		//executa todos os produtores
 		for i := 1; i <= QTD_PRODUTORES; i++ {
-			go produtor(ch, i, m_qt_atividades, m_id_atividades)
+			go produtor(ch, i, m_id_atividades)
 		}
 
 		//executa todos os consumidores
