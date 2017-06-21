@@ -60,10 +60,11 @@ func produtor (ch chan Pedido, n int) {
 			}
 			return
 		}
-		id_pedido.Lock()
-		p = Pedido{id_pedido.n, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
+		//id_pedido.Lock()
+		id := id_pedido.n
 		id_pedido.n += 1
-		id_pedido.Unlock()
+		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
+		//id_pedido.Unlock()
 		ch <- p
 		horario_termino := time.Now()
 
