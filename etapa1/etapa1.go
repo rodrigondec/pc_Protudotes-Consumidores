@@ -9,6 +9,7 @@ import (
 )
 
 const SEPARADOR = " / "
+const TAMANHO_BUFFER = 5000
 
 //estrutura que representa um pedido
 type Pedido struct {
@@ -36,8 +37,7 @@ func consumidor (ch chan Pedido, n int) {
 }
 
 func main() {
-	if len(os.Args) == 3 {
-		TAMANHO_BUFFER, _ := strconv.Atoi(os.Args[1])
+	if len(os.Args) == 2 {
 		QTD_CONSUMIDORES, _ := strconv.Atoi(os.Args[2])
 		var p Pedido
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
@@ -58,7 +58,7 @@ func main() {
 		//espera termino de execucao de todos os consumidores
 		wg.Wait()
 	} else {
-		fmt.Println("Numero invalido de argumentos. Requer exatamente 2 parametros enviados:\n")
-		fmt.Println("1 - Tamanho do buffer / quantidade de pedidos\n2 - Quantidade de gorotinas")
+		fmt.Println("Numero invalido de argumentos. Requer exatamente 1 parametro enviado:\n")
+		fmt.Println("2 - Quantidade de consumidores")
 	}
 }
