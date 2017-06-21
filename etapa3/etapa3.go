@@ -14,14 +14,11 @@ const TAMANHO_BUFFER = 10
 var is_channel_closed = false
 
 var id_pedido struct{
-	sync.Mutex
 	n int
 }
 
 var pedido_processado [TAMANHO_BUFFER]sync.WaitGroup
 
-var m_print_p = sync.Mutex{}
-var m_print_c = sync.Mutex{}
 
 //estrutura que representa um pedido
 type Pedido struct {
@@ -35,14 +32,17 @@ var wg sync.WaitGroup //cria grupo de espera
 bufferizado com 5000 pedidos */
 func consumidor (ch chan Pedido, n int) {
 	for p := range ch {
+		horario_inicio := time.Now()
+
 		index_pedido := p.id-1
 		if index_pedido != 0{
 			fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
-				"Vai esperar o pedido " + strconv.Itoa((p.id-1)) + " ser processado")
+				"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
+				"Vai esperar o pedido " + strconv.Itoa((p.id-1)) + " ser processado" + SEPARADOR +
+				"hora: " + horario_inicio.String())
 			pedido_processado[(index_pedido-1)].Wait()
 		}
 
-		horario_inicio := time.Now()
 		time.Sleep(500 * time.Millisecond)
 		horario_termino := time.Now()
 
@@ -73,19 +73,17 @@ func produtor (ch chan Pedido, n int) {
 			return
 		}
 
-		id_pedido.Lock()
 		id := id_pedido.n
 		id_pedido.n += 1
 		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
-		ch <- p
 		horario_termino := time.Now()
+		ch <- p
 
 		fmt.Println("\tProdutor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
-		id_pedido.Unlock()
 	}
 }
 
