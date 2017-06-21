@@ -72,8 +72,8 @@ func produtor (ch chan Pedido, n int, mutex_qt *sync.Mutex, mutex_id *sync.Mutex
 		id_pedido.Lock()
 		p = Pedido{id_pedido.n, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
 		id_pedido.n += 1
-		id_pedido.Unlock()
 		ch <- p
+		id_pedido.Unlock()
 		horario_termino := time.Now()
 
 
