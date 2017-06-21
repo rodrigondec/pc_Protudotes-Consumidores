@@ -38,7 +38,7 @@ func consumidor (ch chan Pedido, n int) {
 		if index_pedido != 0{
 			fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
 				"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
-				"Vai esperar o pedido " + strconv.Itoa((p.id-1)) + " ser processado" + SEPARADOR +
+				"Vai esperar o pedido " + strconv.Itoa(p.id-1) + " ser processado" + SEPARADOR +
 				"hora: " + horario_inicio.String())
 			pedido_processado[(index_pedido-1)].Wait()
 		}
@@ -87,7 +87,6 @@ func produtor (ch chan Pedido, n int) {
 	}
 }
 
-
 func main() {
 	if len(os.Args) == 3 {
 		QTD_CONSUMIDORES, _ := strconv.Atoi(os.Args[1])
@@ -113,7 +112,7 @@ func main() {
 		//espera termino de execucao de todos os consumidores
 		wg.Wait()
 	} else {
-		fmt.Println("Numero invalido de argumentos. Requer exatamente 2 parametros enviados:\n")
-		fmt.Println("1 - Quantidade de consumidores\n2 - Quantidade de produtores")
+		fmt.Println("Numero invalido de argumentos. Requer exatamente 2 parametros enviados:")
+		fmt.Println("\n1 - Quantidade de consumidores\n2 - Quantidade de produtores")
 	}
 }
