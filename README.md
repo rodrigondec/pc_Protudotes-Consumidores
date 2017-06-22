@@ -3,7 +3,7 @@
 Esse projeto consiste na simulação, em GO, de um servidor que processa pedidos concorrentemente. Para mais informações, veja os [requisitos do projeto](https://github.com/rodrigondec/prog-conc_Protudotes-Consumidores/blob/master/Trabalho-Go.pdf).
 
 As implementações encontram-se no [github](https://github.com/rodrigondec/prog-conc_Protudotes-Consumidores)
-A documentação deverá ser encontrada no gitbook.
+A documentação deverá ser encontrada no gitbook. Por hora, acesse o [sumário](Documents/0-summary.md)
 
 ## Integrantes
 
