@@ -59,6 +59,6 @@ func main() {
 		wg.Wait()
 	} else {
 		fmt.Println("Numero invalido de argumentos. Requer exatamente 1 parametro enviado:")
-		fmt.Println("\n2 - Quantidade de consumidores")
+		fmt.Println("\n1 - Quantidade de consumidores")
 	}
 }
