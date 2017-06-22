@@ -64,7 +64,7 @@ func produtor (ch chan Pedido, n int) {
 		ch <- p
 		horario_termino := time.Now()
 
-		fmt.Println("\tProdutor: " + strconv.Itoa(n) + SEPARADOR +
+		fmt.Println("\nProdutor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
