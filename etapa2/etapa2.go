@@ -15,6 +15,7 @@ const TEMPO_PROCESSAMENTO = 50 // em ms
 var is_channel_closed = false
 
 var id_pedido struct{
+	sync.Mutex
 	n int
 }
 
@@ -51,15 +52,17 @@ func produtor (ch chan Pedido, n int) {
 		var p Pedido
 		horario_inicio := time.Now()
 		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
-		if id_pedido.n > TAMANHO_BUFFER {
+
+		id_pedido.Lock()
+		id := id_pedido.n
+		if id > TAMANHO_BUFFER {
 			if !is_channel_closed {
 				is_channel_closed = true
 				close(ch)
 			}
+			id_pedido.Unlock()
 			return
 		}
-
-		id := id_pedido.n
 		id_pedido.n += 1
 		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
 		horario_termino := time.Now()
@@ -69,6 +72,7 @@ func produtor (ch chan Pedido, n int) {
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
 		ch <- p
+		id_pedido.Unlock()
 	}
 }
 
