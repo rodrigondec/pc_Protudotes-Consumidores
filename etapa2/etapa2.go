@@ -34,7 +34,7 @@ func consumidor (ch chan Pedido, n int) {
 		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 		horario_termino := time.Now()
 
-		fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
+		fmt.Println("\tConsumidor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
@@ -62,15 +62,13 @@ func produtor (ch chan Pedido, n int) {
 		id := id_pedido.n
 		id_pedido.n += 1
 		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
-		ch <- p
 		horario_termino := time.Now()
-
-		fmt.Println("\nProdutor: " + strconv.Itoa(n) + SEPARADOR +
+		fmt.Println("Produtor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
-
+		ch <- p
 	}
 }
 

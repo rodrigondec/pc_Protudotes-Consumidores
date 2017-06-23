@@ -28,7 +28,7 @@ func consumidor (ch chan Pedido, n int) {
 		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 		horario_termino := time.Now()
 
-		fmt.Println("Agente: " + strconv.Itoa(n) + SEPARADOR +
+		fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
