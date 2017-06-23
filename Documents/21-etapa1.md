@@ -1,7 +1,7 @@
 # Etapa 1
 ## Descrição
 
-Nessa etapa não há produtores, i.e. não há clientes fazendo pedidos. O servidor possui um buffer com espaço de armazenamento para 5000 pedidos. Essa quantidade de pedidos é criado previamente e o buffer é preenchido. Em seguida, são chamadas n gorotinas para processá-los até que o buffer seja esvaziado. A quantidade n de gorotinas é enviada por parâmetro via linha de comando (vide [instruções de execução](1-instrucoes.md)). Após retirar um pedido do buffer, a gorotina em questão irá dormir por meio segundo. Esse tempo é necessário para simular processamento, e.g. alterar o banco de dados da empresa.
+Nessa etapa não há produtores, i.e. não há clientes fazendo pedidos. O servidor possui um buffer com espaço de armazenamento para 5000 pedidos. Essa quantidade de pedidos é criada previamente e o buffer é preenchido. Em seguida, são chamadas n gorotinas para processá-los até que o buffer seja esvaziado. A quantidade n de gorotinas é enviada por parâmetro via linha de comando (vide [instruções de execução](1-instrucoes.md)). Após retirar um pedido do buffer, a gorotina em questão irá dormir por meio segundo. Esse tempo é necessário para simular processamento, e.g. alterar o banco de dados da empresa.
 
 ## Benchmarking
 
