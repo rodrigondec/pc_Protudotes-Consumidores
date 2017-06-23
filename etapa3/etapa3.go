@@ -10,7 +10,7 @@ import (
 
 const SEPARADOR = " / "
 const TAMANHO_BUFFER = 10
-const TEMPO_PROCESSAMENTO = 100
+const TEMPO_PROCESSAMENTO = 50 // em ms
 
 var is_channel_closed = false
 

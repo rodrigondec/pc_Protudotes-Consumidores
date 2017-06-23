@@ -10,6 +10,7 @@ import (
 
 const SEPARADOR = " / "
 const TAMANHO_BUFFER = 5000
+const TEMPO_PROCESSAMENTO = 50 // em ms
 
 //estrutura que representa um pedido
 type Pedido struct {
@@ -24,7 +25,7 @@ bufferizado com 5000 pedidos*/
 func consumidor (ch chan Pedido, n int) {
 	for p := range ch {
 		horario_inicio := time.Now()
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 		horario_termino := time.Now()
 
 		fmt.Println("Agente: " + strconv.Itoa(n) + SEPARADOR +
