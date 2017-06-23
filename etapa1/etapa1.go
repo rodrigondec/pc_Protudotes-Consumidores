@@ -10,7 +10,7 @@ import (
 
 const SEPARADOR = " / "
 const TAMANHO_BUFFER = 5000
-const TEMPO_PROCESSAMENTO = 50 // em ms
+const TEMPO_PROCESSAMENTO = 100 // em ms
 
 //estrutura que representa um pedido
 type Pedido struct {
