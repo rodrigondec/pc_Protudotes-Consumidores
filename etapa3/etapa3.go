@@ -36,16 +36,17 @@ func consumidor (ch chan Pedido, n int) {
 		horario_inicio := time.Now()
 
 		index_pedido := p.id-1
-		if index_pedido != 0{
-			fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
-				"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
-				"Vai esperar o pedido " + strconv.Itoa(p.id-1) + " ser processado" + SEPARADOR +
-				"hora: " + horario_inicio.String())
-			pedido_processado[(index_pedido-1)].Wait()
-		}
 
 		time.Sleep(500 * time.Millisecond)
 		horario_termino := time.Now()
+
+		if index_pedido != 0{
+			//fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
+			//	"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
+			//	"Vai esperar o pedido " + strconv.Itoa(p.id-1) + " ser processado" + SEPARADOR +
+			//	"hora: " + horario_inicio.String())
+			pedido_processado[(index_pedido-1)].Wait()
+		}
 
 		fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
