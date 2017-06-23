@@ -6,7 +6,7 @@ Nessa etapa há produtores, i.e. clientes fazendo pedidos. O servidor possui um 
 
 As gorotinas produtoras serão responsáveis por criar pedidos e inserí-los no buffer. Para simular o processamento, cada uma dessas gorotinas irão dormir por um tempo X antes de adicionar o pedido no buffer. A cada execução do programa serão criados, no máximo, 5000 pedidos.
 
-Já as gorotinas consumidoras irão retirar os pedidos do buffer e processá-los até que o buffer seja esvaziado. Após retirar um pedido do buffer, a gorotina em questão irão por um tempo X. Esse tempo é necessário para simular processamento, e.g. alterar o banco de dados da empresa. 
+Já as gorotinas consumidoras irão retirar os pedidos do buffer e processá-los até que o buffer seja esvaziado. Após retirar um pedido do buffer, a gorotina em questão irão por um tempo X. Esse tempo é necessário para simular processamento, e.g. alterar o banco de dados da empresa.
 
 Note que, diferentemente da etapa 1, os pedidos são gerados on-the-go e, não necessariamente, o buffer irá ficar cheio.
 
