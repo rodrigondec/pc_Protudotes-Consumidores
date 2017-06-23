@@ -10,7 +10,7 @@ Já as gorotinas consumidoras irão retirar os pedidos do buffer e processá-los
 
 Note que, diferentemente da etapa 2, os pedidos inseridos no buffer seguem a ordem de criação e a retirada dos pedidos do canal para o consumo também obedece essa ordem.
 
-Para compararmos a etapa 3 com a etapa 2, o tempo X de processamento tanto de produtores quanto de consumidores será de 0,05 segundo \(50ms\).
+Foram realizados benchmarkings com tempo X de 100ms.
 
 ## Benchmarking
 
