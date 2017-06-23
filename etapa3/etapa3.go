@@ -9,7 +9,7 @@ import (
 )
 
 const SEPARADOR = " / "
-const TAMANHO_BUFFER = 10
+const TAMANHO_BUFFER = 5000
 const TEMPO_PROCESSAMENTO = 50 // em ms
 
 var is_channel_closed = false

@@ -39,7 +39,7 @@ func consumidor (ch chan Pedido, n int) {
 
 func main() {
 	if len(os.Args) == 2 {
-		QTD_CONSUMIDORES, _ := strconv.Atoi(os.Args[2])
+		QTD_CONSUMIDORES, _ := strconv.Atoi(os.Args[1])
 		var p Pedido
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
 
