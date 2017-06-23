@@ -8,13 +8,15 @@ import (
 	"os"
 )
 
-const SEPARADOR = " / "
-const TAMANHO_BUFFER = 5000
-const TEMPO_PROCESSAMENTO = 100 // em ms
+const SEPARADOR = " / " //string para separação de informações
+const TAMANHO_BUFFER = 5000 //tamanho do buffer do canal
+const LIMITE_PEDIDOS = TAMANHO_BUFFER //limite de pedidos produzidos
+const TEMPO_PROCESSAMENTO = 100 //em ms
 
-var is_channel_closed = false
+var is_channel_closed = false //variável de condição se canal está fechado ou não
 
-var id_pedido struct{
+//estrutura que representa o contador de id_pedido
+var contador_id_pedido struct{
 	sync.Mutex
 	n int
 }
@@ -25,7 +27,7 @@ type Pedido struct {
 	dados string
 }
 
-var wg sync.WaitGroup //cria grupo de espera
+var consumo sync.WaitGroup //cria grupo de espera de consumo dos pedidos
 
 /* gorotina consumidora que consumirá de um canal
 bufferizado com 5000 pedidos */
@@ -41,7 +43,7 @@ func consumidor (ch chan Pedido, n int) {
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
 	}
-	wg.Done()
+	consumo.Done()
 }
 
 
@@ -53,15 +55,17 @@ func produtor (ch chan Pedido, n int) {
 		horario_inicio := time.Now()
 		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 
-		if id_pedido.n > TAMANHO_BUFFER {
+		//condição de parada de produção
+		if contador_id_pedido.n > LIMITE_PEDIDOS {
 			if !is_channel_closed {
 				is_channel_closed = true
 				close(ch)
 			}
 			return
 		}
-		id := id_pedido.n
-		id_pedido.n += 1
+		//inserção do pedido no canal
+		id := contador_id_pedido.n
+		contador_id_pedido.n += 1
 		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
 		ch <- p
 		horario_termino := time.Now()
@@ -70,6 +74,7 @@ func produtor (ch chan Pedido, n int) {
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
+
 	}
 }
 
@@ -78,7 +83,7 @@ func main() {
 	if len(os.Args) == 3 {
 		QTD_CONSUMIDORES, _ := strconv.Atoi(os.Args[1])
 		QTD_PRODUTORES, _ := strconv.Atoi(os.Args[2])
-		id_pedido.n = 1
+		contador_id_pedido.n = 1
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
 
 		//executa todos os produtores
@@ -88,12 +93,12 @@ func main() {
 
 		//executa todos os consumidores
 		for i := 1; i <= QTD_CONSUMIDORES; i++ {
-			wg.Add(1)
+			consumo.Add(1)
 			go consumidor(ch, i)
 		}
 
 		//espera termino de execucao de todos os consumidores
-		wg.Wait()
+		consumo.Wait()
 	} else {
 		fmt.Println("Numero invalido de argumentos. Requer exatamente 2 parametros enviados:")
 		fmt.Println("\n1 - Quantidade de consumidores\n2 - Quantidade de produtores")
