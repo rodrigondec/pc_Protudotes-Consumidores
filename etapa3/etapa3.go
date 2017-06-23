@@ -19,10 +19,7 @@ var id_pedido struct{
 	n int
 }
 
-var mutex_c_p = sync.Mutex{}
-
-var pedido_processado [TAMANHO_BUFFER]sync.WaitGroup
-
+var mutex_consumidor_print = sync.Mutex{}
 
 //estrutura que representa um pedido
 type Pedido struct {
@@ -35,26 +32,16 @@ var wg sync.WaitGroup //cria grupo de espera
 /* gorotina consumidora que consumirá de um canal
 bufferizado com 5000 pedidos */
 func consumidor (ch chan Pedido, n int) {
-	mutex_c_p.Lock()
+	mutex_consumidor_print.Lock()
 	for p := range ch {
 		horario_inicio := time.Now()
-		//mutex_c_p.Lock()
 		fmt.Println("\tConsumidor: " + strconv.Itoa(n) +
 			" Retirou o pedido " + strconv.Itoa(p.id) +
 			" na hora " + horario_inicio.String())
-		mutex_c_p.Unlock()
-		index_pedido := p.id-1
+		mutex_consumidor_print.Unlock()
 
 		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 		horario_termino := time.Now()
-
-		if index_pedido != 0{
-			//fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
-			//	"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
-			//	"Vai esperar o pedido " + strconv.Itoa(p.id-1) + " ser processado" + SEPARADOR +
-			//	"hora: " + horario_inicio.String())
-			pedido_processado[(index_pedido-1)].Wait()
-		}
 
 		fmt.Println("\t\tConsumidor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
@@ -62,10 +49,9 @@ func consumidor (ch chan Pedido, n int) {
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
 
-		pedido_processado[(index_pedido)].Done()
-		mutex_c_p.Lock()
+		mutex_consumidor_print.Lock()
 	}
-	mutex_c_p.Unlock()
+	mutex_consumidor_print.Unlock()
 	wg.Done()
 }
 
@@ -77,7 +63,6 @@ func produtor (ch chan Pedido, n int) {
 		var p Pedido
 		horario_inicio := time.Now()
 		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
-
 
 		id_pedido.Lock()
 		id := id_pedido.n
@@ -109,10 +94,6 @@ func main() {
 		QTD_PRODUTORES, _ := strconv.Atoi(os.Args[2])
 		id_pedido.n = 1
 		ch := make(chan Pedido, TAMANHO_BUFFER) //cria canal
-
-		for i := 0; i < TAMANHO_BUFFER; i++{
-			pedido_processado[i].Add(1)
-		}
 
 		//executa todos os produtores
 		for i := 1; i <= QTD_PRODUTORES; i++ {
