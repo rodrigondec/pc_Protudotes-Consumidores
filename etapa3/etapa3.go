@@ -14,6 +14,7 @@ const TAMANHO_BUFFER = 10
 var is_channel_closed = false
 
 var id_pedido struct{
+	sync.Mutex
 	n int
 }
 
@@ -73,6 +74,7 @@ func produtor (ch chan Pedido, n int) {
 			return
 		}
 
+		id_pedido.Lock()
 		id := id_pedido.n
 		id_pedido.n += 1
 		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
@@ -84,6 +86,7 @@ func produtor (ch chan Pedido, n int) {
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
+		id_pedido.Unlock()
 	}
 }
 
