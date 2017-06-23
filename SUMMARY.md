@@ -6,6 +6,5 @@
   * [2.1 Etapa 1](Documents/21-etapa1.md)
   * [2.2 Etapa 2](Documents/22-etapa2.md)
   * [2.3 Etapa 3](Documents/23-etapa3.md)
-
-
+* [3 Conclusão](Documents/3-conclusao.md)
 
