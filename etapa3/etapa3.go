@@ -19,6 +19,8 @@ var id_pedido struct{
 	n int
 }
 
+var mutex_c_p = sync.Mutex{}
+
 var pedido_processado [TAMANHO_BUFFER]sync.WaitGroup
 
 
@@ -35,9 +37,12 @@ bufferizado com 5000 pedidos */
 func consumidor (ch chan Pedido, n int) {
 	for p := range ch {
 		horario_inicio := time.Now()
-
+		mutex_c_p.Lock()
+		fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
+			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
+			"hora: " + horario_inicio.String())
 		index_pedido := p.id-1
-
+		mutex_c_p.Unlock()
 		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 		horario_termino := time.Now()
 
