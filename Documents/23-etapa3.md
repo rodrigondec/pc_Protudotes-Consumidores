@@ -6,11 +6,11 @@ Nessa etapa há produtores, i.e. clientes fazendo pedidos. O servidor possui um 
 
 As gorotinas produtoras serão responsáveis por criar pedidos e inserí-los no buffer seguindo uma ordem de criação para a inserção no buffer. Para simular o processamento, cada uma dessas gorotinas irão dormir por um tempo X antes de adicionar o pedido no buffer. A cada execução do programa serão criados, no máximo, 5000 pedidos.
 
-Já as gorotinas consumidoras irão retirar os pedidos do buffer e processá-los, na ordem de criação, até que o buffer seja esvaziado. Após retirar um pedido do buffer, a gorotina em questão irão por um tempo X. Esse tempo é necessário para simular processamento, e.g. alterar o banco de dados da empresa. 
+Já as gorotinas consumidoras irão retirar os pedidos do buffer e processá-los, na ordem de criação, até que o buffer seja esvaziado. Após retirar um pedido do buffer, a gorotina em questão irão por um tempo X. Esse tempo é necessário para simular processamento, e.g. alterar o banco de dados da empresa.
 
 Note que, diferentemente da etapa 2, os pedidos inseridos no buffer seguem a ordem de criação e a retirada dos pedidos do canal para o consumo também obedece essa ordem.
 
-Para compararmos a etapa 2 com a etapa 1, o tempo X de processamento tanto dos produtores quanto consumidores será de meio segundo \(500ms\). Enquanto para compararmos a etapa 2 com a etapa 3, o tempo X de processamento tanto de produtores quanto de consumidores será de 0,05 segundo \(50ms\).
+Para compararmos a etapa 3 com a etapa 2, o tempo X de processamento tanto de produtores quanto de consumidores será de 0,05 segundo \(50ms\).
 
 ## Benchmarking
 
