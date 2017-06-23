@@ -53,26 +53,23 @@ func produtor (ch chan Pedido, n int) {
 		horario_inicio := time.Now()
 		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 
-		id_pedido.Lock()
-		id := id_pedido.n
-		if id > TAMANHO_BUFFER {
+		if id_pedido.n > TAMANHO_BUFFER {
 			if !is_channel_closed {
 				is_channel_closed = true
 				close(ch)
 			}
-			id_pedido.Unlock()
 			return
 		}
+		id := id_pedido.n
 		id_pedido.n += 1
 		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
+		ch <- p
 		horario_termino := time.Now()
 		fmt.Println("Produtor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
-		ch <- p
-		id_pedido.Unlock()
 	}
 }
 
