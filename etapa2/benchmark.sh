@@ -18,13 +18,13 @@ do
 	#runs the program the desired number of times
 	for j in `seq 1 $MAX_ITERATIONS`;
 	do
-		start=$( date +"%T" )
+		start=$( date -I'ns' )
 		go run etapa2.go $i $i
-		end=$( date +"%T" )
+		end=$( date -I'ns' )
 		echo "-------------------------ITERATION #"$j"-------------------------" >> $FILE
 		echo "Start time: "$start >> $FILE
 		echo "Finished time: "$end >> $FILE
-		echo "Duration: "$(($(date -d $end +%s) - $(date -d $start +%s))) "second(s)" >> $FILE
+		echo "Duration: "$(($(($(date -d $end +%s%N) - $(date -d $start +%s%N)))/1000000)) "millisecond(s)" >> $FILE
 		echo"" >> $FILE
 	done
 done
