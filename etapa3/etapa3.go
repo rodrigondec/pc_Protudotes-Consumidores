@@ -10,6 +10,7 @@ import (
 
 const SEPARADOR = " / "
 const TAMANHO_BUFFER = 10
+const TEMPO_PROCESSAMENTO = 100
 
 var is_channel_closed = false
 
@@ -37,7 +38,7 @@ func consumidor (ch chan Pedido, n int) {
 
 		index_pedido := p.id-1
 
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 		horario_termino := time.Now()
 
 		if index_pedido != 0{
@@ -66,7 +67,7 @@ func produtor (ch chan Pedido, n int) {
 	for {
 		var p Pedido
 		horario_inicio := time.Now()
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 		if id_pedido.n > TAMANHO_BUFFER {
 			if !is_channel_closed {
 				is_channel_closed = true
