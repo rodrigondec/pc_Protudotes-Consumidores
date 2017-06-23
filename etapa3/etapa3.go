@@ -35,14 +35,16 @@ var wg sync.WaitGroup //cria grupo de espera
 /* gorotina consumidora que consumirá de um canal
 bufferizado com 5000 pedidos */
 func consumidor (ch chan Pedido, n int) {
+	mutex_c_p.Lock()
 	for p := range ch {
 		horario_inicio := time.Now()
-		mutex_c_p.Lock()
-		fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
-			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
-			"hora: " + horario_inicio.String())
-		index_pedido := p.id-1
+		//mutex_c_p.Lock()
+		fmt.Println("\tConsumidor: " + strconv.Itoa(n) +
+			" Retirou o pedido " + strconv.Itoa(p.id) +
+			" na hora " + horario_inicio.String())
 		mutex_c_p.Unlock()
+		index_pedido := p.id-1
+
 		time.Sleep(TEMPO_PROCESSAMENTO * time.Millisecond)
 		horario_termino := time.Now()
 
@@ -54,14 +56,16 @@ func consumidor (ch chan Pedido, n int) {
 			pedido_processado[(index_pedido-1)].Wait()
 		}
 
-		fmt.Println("Consumidor: " + strconv.Itoa(n) + SEPARADOR +
+		fmt.Println("\t\tConsumidor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
 
 		pedido_processado[(index_pedido)].Done()
+		mutex_c_p.Lock()
 	}
+	mutex_c_p.Unlock()
 	wg.Done()
 }
 
@@ -86,13 +90,13 @@ func produtor (ch chan Pedido, n int) {
 		id_pedido.n += 1
 		p = Pedido{id, "Dados do pedido #" + strconv.Itoa(id_pedido.n)}
 		horario_termino := time.Now()
-		ch <- p
-
-		fmt.Println("\tProdutor: " + strconv.Itoa(n) + SEPARADOR +
+		fmt.Println("Produtor: " + strconv.Itoa(n) + SEPARADOR +
 			"Pedido: " + strconv.Itoa(p.id) + SEPARADOR +
 			"Inicio proc: " + horario_inicio.String() + SEPARADOR +
 			"Termino proc: " + horario_termino.String() + SEPARADOR +
 			"Duracao: " + horario_termino.Sub(horario_inicio).String())
+		ch <- p
+
 		id_pedido.Unlock()
 	}
 }
