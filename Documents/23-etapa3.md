@@ -16,6 +16,8 @@ Foram realizados benchmarkings com tempo X de 100ms.
 
 A seguinte tabela mostra uma análise estatística do tempo necessário para executar o algoritmo para diferentes quantidades de gorotinas simultaneamente \(representadas na primeira coluna\). O código foi rodado somente nos casos em que a quantidade de consumidores iguala a quantidade de produtores, ou seja: \[\(1, 1\), \(5, 5\), \(10, 10\), \(50, 50\), \(100, 100\), \(500, 500\), \(1000, 1000\), \(5000, 5000\)\]. O algoritmo foi executado 80 vezes: 10 vezes para cada entrada \(linha da tabela\), conforme requisitado na [especificação do projeto](../Trabalho-Go.pdf).
 
+### 100ms
+
 | Qt consumidores | Qt produtores | Tempo Mínimo | Tempo Médio | Tempo Máximo | Desvio Padrão |
 | :---: | :---: | :---: | :---: | :---: | :---: |
 | 1 | 1 | 502.066 | 502.2001 | 502.434 | 0.1082019 |
