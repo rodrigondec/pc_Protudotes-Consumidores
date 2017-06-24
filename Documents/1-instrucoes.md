@@ -1,6 +1,6 @@
 # Instruções
 
-## Requerimentos 
+## Requerimentos
 
 * [Compilador de GO](https://golang.org/doc/install)
 
@@ -10,7 +10,7 @@ Para executar o programa de cada uma das etapas basta executar o comando `go run
 
 ### Etapa 1
 
-Supondo que o usuário esteja na mesma pasta do arquivo (prog-conc_Protudotes-Consumidores/etapa1/), o seguinte comando deve ser executado.
+Supondo que o usuário esteja na mesma pasta do arquivo \(prog-conc\_Protudotes-Consumidores/etapa1/\), o seguinte comando deve ser executado.
 
 ```
 go run etapa1.go <qtd_consumidores>
@@ -22,7 +22,7 @@ Para mais detalhes sobre o funcionamento desse algoritmo acesse a [documentaçã
 
 ### Etapa 2
 
-Supondo que o usuário esteja no diretório pai do arquivo (prog-conc_Protudotes-Consumidores/), o seguinte comando deve ser executado.
+Supondo que o usuário esteja no diretório pai do arquivo \(prog-conc\_Protudotes-Consumidores/\), o seguinte comando deve ser executado.
 
 ```
 go run etapa2/etapa2.go <qtd_consumidores> <qtd_produtores>
@@ -34,3 +34,15 @@ go run etapa2/etapa2.go <qtd_consumidores> <qtd_produtores>
 Para mais detalhes sobre o funcionamento desse algoritmo acesse a [documentação da etapa2](22-etapa2.md)
 
 ### Etapa 3
+
+Supondo que o usuário esteja no diretório pai do arquivo \(prog-conc\_Protudotes-Consumidores/\), o seguinte comando deve ser executado.
+
+```
+go run etapa3/etapa3.go <qtd_consumidores> <qtd_produtores>
+
+<qtd_consumidores> Quantidade de gorotinas consumidoras. Irão retirar pedidos da fila e processá-los
+<qtd_produtores> Quantidade de gorotinas produtoras. Irão inserir pedidos na fila.
+```
+
+Para mais detalhes sobre o funcionamento desse algoritmo acesse a [documentação da etapa3](/Documents/23-etapa3.md)
+
